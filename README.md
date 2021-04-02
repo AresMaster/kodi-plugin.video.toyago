@@ -1,2 +1,2 @@
-# kodi-plugin.video.toyago
-ToyaGo Kodi Addon
+# plugin.video.toyago
+

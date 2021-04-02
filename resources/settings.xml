@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="ToyaGO">
+		<setting label="Dane logowania" type="lsep" />
+		<setting id="has_account" type="bool" default="true" label="Mam konto"/>
+		<setting id="toya_go_user" type="text" default="" label="Email (ABC@toya.net.pl)" visible="eq(-1,true)"/>
+		<setting id="toya_go_pass" type="text" default="" option="hidden" label="Hasło" visible="eq(-2,true)"/>
+		<setting id="toya_go_device" type="text" default="" label="DeviceID (opcjonalnie)" visible="false"/>
+		<setting id="toya_go_token" type="text" default="NOT_SET_YET" visible="false"/>
+		<setting id="toya_go_init" type="bool" default="true" visible="false"/>
+		<setting label="Odśwież" type="action" action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=refreshtoken)" visible="false"/>
+		<setting label="Wyczyść Bazę Danych" type="hiden" action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=cleardb)" visible="false"/>
+	</category>
+	<category label="Telewizja">
+		<setting id="toya_go_tv" type="bool" default="true" label="Włącz"/>
+		<setting id="toya_go_epg" type="bool" default="false" label="EPG" visible="eq(-1,true)"/>
+		<setting id="toya_go_tv_num" type="bool" default="false" label="Wyświetlaj numery kanałów" visible="eq(-2,true)"/>
+		<setting id="toya_go_tv_main_screen" type="bool" default="false" label="Kanały w menu początkowym"  visible="eq(-3,true)"/>
+		<setting id="toya_go_tv_sort" type="enum" values="Brak|Alfabetycznie" label="Sortowanie" default="0" visible="eq(-4,true) + eq(-1,false)"/>
+
+	</category>
+	<category label="Pozostałe">
+		<setting id="toya_go_freevod" type="bool" default="true" label="FreeVOD"/>
+		<setting id="toya_go_radio" type="bool" default="true" label="Stacje radiowe"/>
+		<setting id="toya_go_camera" type="bool" default="true" label="Kamery"/>
+		<setting id="toya_go_karaoke" type="bool" default="true" label="Karaoke"/>
+	</category>
+	<category label="Playlista M3U">
+		<setting label="Generator playlisty" type="lsep" />
+		<setting id="m3u_dir" type="folder" default="" label="Folder playlisty m3u" option="writeable" source="auto"/>
+		<setting id="playlist_type" type="enum" values="M3U Service|Plugin" label="Typ linków" default="0"/>
+		<setting label="Generuj playlistę" type="action" option="close" action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=generatePlaylist)"/>
+	</category>
+	<category label="PVR">
+		<setting label="ToyaGo Serwis PVR" type="lsep" />
+		<setting id="server_enable" type="bool" default="true" label="Serwer Aktywny" />
+		<setting id="server_port" type="number" default="8899" label="Port" visible="eq(-1,true)"/>
+		<setting id="server_tv" type="bool" default="true" label="Kanały telewizyjne" visible="false"/>
+		<setting id="server_radio" type="bool" default="false" label="Stacje radiowe" visible="false"/>
+		<setting label="Włącz Serwer" type="action" action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=startServer)" visible="false"/>
+		<setting label="Wyłącz Serwer" type="action" action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=stopServer)" visible="false"/>
+		<setting id="startup_delay" type="number" default="0" label="Opóźnienie startu" visible="false"/>
+		<setting id="xmltv_dir" type="folder" default="" label="Folder EPG" visible="false" />
+	</category>
+	<category label="IPTV Addon">
+		<setting label="Dedykowane EPG" type="lsep" />
+		<setting id="pvr_epg_source" type="enum" values="Brak|Dedykowane - 1 dzień|EPG.OVH - 5 dni" default="1"
+				 label="Źródło przewodnika EPG" />
+		<setting label="IPTV Simple" type="lsep" />
+		<setting id="pvr_noiptvsimple" type="text" default="" label="Brak zainstalowanego dodatku" enable="false"
+				 visible="!System.HasAddon(pvr.iptvsimple)"/>
+		<setting label="Ustawienia IPTV Simple" type="action" option="close" visible="System.HasAddon(pvr.iptvsimple)"
+				 action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=iptvSettings&amp;target=pvr.iptvsimple)"/>
+		<setting label="Skonfiguruj IPTV Simple" type="action" option="close" visible="System.HasAddon(pvr.iptvsimple)"
+				 action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=setIptvSettings&amp;target=pvr.iptvsimple)"/>
+		<setting label="IPTV Archive" type="lsep" />
+		<setting id="pvr_noiptvarchive" type="text" default="" label="Brak zainstalowanego dodatku" enable="false"
+				 visible="!System.HasAddon(pvr.iptvarchive)"/>
+		<setting label="Ustawienia IPTV Archive" type="action" option="close" visible="System.HasAddon(pvr.iptvarchive)"
+				 action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=iptvSettings&amp;target=pvr.iptvarchive)"/>
+		<setting label="Skonfiguruj IPTV Archive" visible="System.HasAddon(pvr.iptvarchive)" type="action" option="close"
+				 action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=setIptvSettings&amp;target=pvr.iptvarchive)"/>
+		<setting label="Własny addon" type="lsep" />
+		<setting id="custom_pvraddon_conf" type="bool" default="false" label="Aktywny" />
+		<setting id="custom_pvraddon_name" type="text" default="" label="Nazwa (pvr.iptvsimple)" visible="eq(-1,true)"/>
+		<setting id="custom_pvraddon_m3uparam" type="text" default="" label="Nazwa parametru ścieżki m3u" visible="eq(-2,true)"/>
+		<setting id="custom_pvraddon_epgparam" type="text" default="" label="Nazwa parametru adresu EPG" visible="eq(-3,true)"/>
+		<setting id="custom_pvraddon_param1name" type="text" default="" label="Własny parametr 1 - nazwa (opcjonalnie)" visible="eq(-4,true)"/>
+		<setting id="custom_pvraddon_param1value" type="text" default="" label="Własny parametr 1 - wartość (opcjonalnie)" visible="eq(-5,true)"/>
+		<setting id="custom_pvraddon_param2name" type="text" default="" label="Własny parametr 2 - nazwa (opcjonalnie)" visible="eq(-6,true)"/>
+		<setting id="custom_pvraddon_param3value" type="text" default="" label="Własny parametr 2 - wartość (opcjonalnie)" visible="eq(-7,true)"/>
+		<setting label="Skonfiguruj dodatek (najpierw zapisz ustawienia)"  type="action" visible="eq(-8,true)" option="close"
+				 action="XBMC.RunPlugin(plugin://plugin.video.toyago/?action=setIptvCustomSettings)"/>
+	</category>
+	<category label="Development">
+		<setting id="developr_mode" type="bool" default="false" label="Opcje developerskie"/>
+	</category>
+</settings>
