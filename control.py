@@ -3,7 +3,10 @@
 import xbmc
 import xbmcaddon
 import xbmcgui
+import xbmcvfs
 import uuid
+
+debugAddon = True
 
 addon = xbmcaddon.Addon()
 user = addon.getSetting('toya_go_user');
@@ -16,7 +19,7 @@ addonname = addon.getAddonInfo('name')
 server_enable = addon.getSetting('server_enable')
 server_port = addon.getSetting('server_port')
 epg = addon.getSetting('toya_go_epg')
-m3u_dir = xbmc.translatePath(addon.getSetting('m3u_dir'))
+m3u_dir = xbmcvfs.translatePath(addon.getSetting('m3u_dir'))
 xmltv_dir = addon.getSetting('xmltv_dir')
 toya_go_radio = addon.getSetting('toya_go_radio')
 toya_go_camera = addon.getSetting('toya_go_camera')
@@ -31,10 +34,10 @@ main_screen_tv = addon.getSetting('toya_go_tv_main_screen')
 pvr_epg_source = addon.getSetting('pvr_epg_source')
 playlist_type = addon.getSetting('playlist_type')
 toya_go_tv_num = addon.getSetting('toya_go_tv_num')
-epg_url = 'https://github.com/piotrekcrash/kodi/raw/master/epg/epg_toya.xml'
-ekg_kwp_url = 'https://epg.ovh/pl.xml'
+# epg_url = 'https://github.com/piotrekcrash/kodi/raw/master/epg/epg_toya.xml'
+ekg_kwp_url = 'https://epg.ovh/pl.gz'
 PHOTO_URL = 'https://data-go.toya.net.pl/photo/categories/'
-profile = dataPath = xbmc.translatePath(addon.getAddonInfo('profile'))
+profile = dataPath = xbmcvfs.translatePath(addon.getAddonInfo('profile'))
 icon = addon.getAddonInfo('icon')
 
 
@@ -84,12 +87,12 @@ def setIptvSettings(addonName):
 
 
 def epgSourceUrl(epgtype):
-    if epgtype == '1':
-        return epg_url
-    elif epgtype == '2':
-        return ekg_kwp_url
-    return ''
-
+    # if epgtype == '1':
+    #     return epg_url
+    # elif epgtype == '2':
+    #     return ekg_kwp_url
+    # return ''
+    return ekg_kwp_url
 
 def setIptvCustomSettings():
     custom_pvraddon_name = addon.getSetting('custom_pvraddon_name')

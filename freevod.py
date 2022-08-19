@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import client
 import model
-import control
+#import control
 
 API_CAT = '/22-free-vod'
 CAT_URL = 'https://data-go.toya.net.pl/photo/categories/free/'

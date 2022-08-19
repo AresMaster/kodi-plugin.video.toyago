@@ -17,7 +17,8 @@ class GetInstance:
         soap = client.authRequest(API_CAT, True)
         categories = []
         channels = soap.findAll("div", {"class": ITEM_CHANNEL})
-        # gInfo(str(channels))
+        if control.debugAddon:
+            control.logInfo(str(channels))
         for channel in channels:
             source = channel.find("a").get('href')
             entry = channel.find("img", {"class": 'logo'})
@@ -31,7 +32,8 @@ class GetInstance:
         chList = []
         counter = 0
         channels = soap.findAll("div", {"class": ITEM_CHANNEL})
-        # control.logInfo(str(channels))
+        if control.debugAddon:
+            control.logInfo(str(channels))
         for channel in channels:
             counter += 1
             source = channel.find("a").get('href')
@@ -47,3 +49,20 @@ class GetInstance:
     def getTvSource(self, source):
         soap = client.authRequest(source, False)
         return soap.find("div", {"id": 'player'}).get('data-stream')
+    
+    def getTvFormat(self, source):
+        soap = client.authRequest(source, False)
+        format = soap.find("div", {"id": 'player'}).get('data-format')
+        if format == 'dash':
+            format = 'mpd'
+        else:
+            format = 'hls'
+        return format
+    
+    def getTvLicenseServer(self, source):
+        soap = client.authRequest(source, False)
+        return soap.find("div", {"id": 'player'}).get('data-license-server')
+    
+    def getTvManifesttUrl(self, source):
+        soap = client.authRequest(source, False)
+        return soap.find("div", {"id": 'player'}).get('data-manifest-uri')

@@ -8,7 +8,7 @@ import os.path
 API_URL = 'https://api-go.toya.net.pl/toyago/index.php'
 BROWS_URL = 'https://go.toya.net.pl'
 BROWS_AUTH_URL = 'https://auth.toya.net.pl'
-nextUrl = 'aHR0cHM6Ly9nby50b3lhLm5ldC5wbC8'
+nextUrl = 'aHR0cHM6Ly9nby50b3lhLm5ldC5wbC8xMS1vZ2xhZGFqLXR2'
 
 
 def request(url, data):

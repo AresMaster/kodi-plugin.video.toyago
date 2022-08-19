@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import client
 import xmlCommon
-import threading
-from datetime import datetime, timedelta
-import time
+#import threading
+#from datetime import datetime, timedelta
+#import time
 import datasource
 import control
 
@@ -23,7 +23,7 @@ class GetInstance:
             self.authenticate(True)
 
     def authenticate(self, valid):
-        import control
+        #import control
         isvalid = self.setVersion()
         # print('Token valid: ' + str(isvalid) + ' prev: ' + str(valid))
         if not isvalid:
@@ -62,9 +62,11 @@ class GetInstance:
 
     def epg(self, cids, epg):
         epgStr = self.xmlReq.getEPG(self.token, self.deviceId, cids)
-        # control.logError(str(epgStr))
+        if control.debugAddon:
+            control.logError(str(epgStr))
         epgResp = client.request(apiUrl, epgStr).decode('utf-8')
-        # control.logError(str(epgResp))
+        if control.debugAddon:
+            control.logError(str(epgResp))
         self.xmlResp.parseEPG(epgResp, epg)
 
     # Deprecated

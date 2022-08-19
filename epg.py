@@ -3,7 +3,7 @@
 import client
 import json
 import epgrepo
-import channelrepo
+#import channelrepo
 import model
 from datetime import datetime, timedelta
 import control

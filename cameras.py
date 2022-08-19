@@ -2,7 +2,7 @@
 
 import client
 import model
-import control
+#import control
 
 WEATHER = '/weather'
 API_CAT = '/25'

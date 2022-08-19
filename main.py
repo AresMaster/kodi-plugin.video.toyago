@@ -11,9 +11,11 @@ import time
 import kodiservice
 import control
 import urllib
+import requests
+
 # import urlparse
 
-IMG_URL = 'http://data.go.toya.net.pl/logo/iconxmb'
+IMG_URL = 'https://data-go.toya.net.pl/logo/iconxmb'
 IMG_RADIO = '/internetradio_icon_big.png'
 IMG_CAMERA = '/camera_active.png'
 IMG_TV = '/tv_icon_big.png'
@@ -70,15 +72,62 @@ def playTv(source):
     control.setbusy(True)
     tvapi = tv.GetInstance()
     url = tvapi.getTvSource(source)
-    play_item = xbmcgui.ListItem('TV')
-    play_item.setProperty('IsPlayable', 'true')
+    format = tvapi.getTvFormat(source)
+    manifest = tvapi.getTvManifesttUrl(source)
+    license = tvapi.getTvLicenseServer(source)
+    control.logInfo("URL TV: " + url)
+    control.logInfo("FORMAT TV: " + format)
+    control.logInfo("LICENSE TV: " + license)
+    control.logInfo("MANIFEST TV: " + manifest)
+    if manifest != "":
+        url = manifest
+    play_item = playTvApi(url, format, license, manifest)
     control.setbusy(False)
-    xbmc.Player().play(item=url, listitem=play_item)  # , windowed=False, startpos=3
+    xbmc.Player().play(item=url, listitem=play_item)
 
-def playTvApi(path):
-    ch = kodiservice.getchannel(control.profile, path, control.db)
-    play_item = xbmcgui.ListItem(path=ch.source)
-    xbmcplugin.setResolvedUrl(_handle, True, listitem=play_item)
+
+def playTvApi(path, format, license, manifest):
+    control.logInfo("!!! RUN playTvApi !!!")
+    #ch = kodiservice.getchannel(control.profile, path, control.db)
+    play_item = xbmcgui.ListItem('TV', path=path)
+
+    play_item.setProperty('IsPlayable', 'true')
+    play_item.setMimeType('application/xml+dash')
+    play_item.setContentLookup(False)
+
+    play_item.setProperty('inputstream', 'inputstream.adaptive')
+
+    play_item.setProperty(
+        'inputstream.adaptive.manifest_type', format)
+    if manifest != '':
+        import inputstreamhelper
+        ia_helper = inputstreamhelper.Helper(format, drm='com.widevine.alpha')
+        if ia_helper.check_inputstream():
+            # headers = {
+            #     'Host': 'api-go.toya.net.pl',
+            #     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:103.0) Gecko/20100101 Firefox/103.0',
+            #     'Accept': '*/*',
+            #     'Referer': 'https://go.toya.net.pl/',
+            #     'Origin':'https://go.toya.net.pl',
+            #     'Sec-Fetch-Dest': 'empty',
+            #     'Sec-Fetch-Mode': 'cors',
+            #     'Sec-Fetch-Site': 'same-site',
+            #     'Sec-GPC': '1',
+            # }
+            # response = requests.get("https://api-go.toya.net.pl/toyago/drm/token/?cid=1167&dev=TOYA_GO_WEB", headers=headers, timeout=15, verify=False).json()
+            # control.logInfo("HEADER VALUE: "+response['headerValue'])
+
+            play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
+            play_item.setProperty(
+            'inputstream.adaptive.manifest_update_parameter', 'full')
+            #play_item.setProperty(
+            #    'inputstream.adaptive.license_key', license + '|Content-Type=application/octet-stream&preauthorization='+response['headerValue']+'|b{SSM}R{KID}|B')
+            play_item.setProperty(
+                'inputstream.adaptive.license_key', license+'|||B')
+            play_item.setProperty('inputstream.adaptive.license_flags', "persistent_storage")
+
+            xbmcplugin.setResolvedUrl(_handle, True, listitem=play_item)
+    return play_item
 
 
 def playKaraoke(source):
@@ -210,7 +259,7 @@ def addChannelsTv(listing):
             list_item.setArt({'thumb': channelThumb})
             list_item.setProperty('fanart_image', channelThumb)
             list_item.setInfo('video', {'title': title, 'genre': channel.genre, 'plot': next_title + '\n' + descr,
-                                        'plotoutline ': epgTitle, 'originaltitle': epgTitle})
+                                        'plotoutline': epgTitle, 'originaltitle': epgTitle})
             list_item.setArt({'landscape': channelThumb})
             list_item.setProperty('IsPlayable', 'false')
             url = '{0}?action=playTv&source={1}'.format(_url, channel.source)
@@ -306,7 +355,7 @@ def oldchannels():
                 list_item.setArt({'thumb': channelThumb})
                 list_item.setProperty('fanart_image', channelThumb)
                 list_item.setInfo('video', {'title': title, 'genre': channel.genre, 'plot': next_title + '\n' + descr,
-                                            'plotoutline ': epgTitle, 'originaltitle': epgTitle})
+                                            'plotoutline': epgTitle, 'originaltitle': epgTitle})
                 list_item.setArt({'landscape': channelThumb})
                 list_item.setProperty('IsPlayable', 'true')
                 url = '{0}?action=play&video={1}'.format(_url, channel.id)
